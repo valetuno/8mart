@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA VI — The Leonida Gallery</title>
+  <link rel="icon" href="GTA_VI_HighRes_Images/14_GTA_VI_Official_Emblem_Logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #06060a;
+      --surface: #0e0e14;
+      --text: #e8e6e1;
+      --dim: #6a6860;
+      --accent: #e85d3a;
+      --pink: #ff2d87;
+      --blue: #00d4ff;
+      --gold: #d4a843;
+      --teal: #00e6c3;
+      --purple: #a855f7;
+      --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-elastic: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+    }
+
+    html { scrollbar-width: thin; scrollbar-color: var(--pink) var(--bg); }
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--pink); border-radius: 3px; }
+    ::selection { background: var(--pink); color: #fff; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      cursor: none;
+    }
+
+    /* ──── SCROLL PROGRESS ──── */
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; height: 3px;
+      background: linear-gradient(90deg, var(--pink), var(--blue), var(--teal));
+      z-index: 10001; width: 0%; transition: width .1s;
+    }
+
+    /* ──── ROMAN VI CURSOR SYSTEM ──── */
+    .cur-vi {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 100000;
+      width: 44px; height: 34px;
+      margin-left: -2px; margin-top: -2px;
+      will-change: transform;
+      filter: drop-shadow(0 0 10px rgba(255,45,135,.75)) drop-shadow(0 0 22px rgba(0,212,255,.4));
+      transition: filter .3s, transform .02s linear, opacity .25s;
+      transform-origin: 2px 2px;
+    }
+    .cur-vi-img {
+      width: 100%; height: 100%; object-fit: contain; display: block;
+      transition: transform .25s var(--ease-elastic);
+    }
+    .cur-vi.hover {
+      filter: drop-shadow(0 0 18px rgba(255,45,135,.95)) drop-shadow(0 0 35px rgba(0,212,255,.65)) brightness(1.25);
+    }
+    .cur-vi.hover .cur-vi-img {
+      transform: scale(1.32) rotate(-5deg);
+    }
+    .cur-vi.active .cur-vi-img {
+      transform: scale(0.85) rotate(3deg);
+    }
+    .cur-ring {
+      position: fixed; width: 48px; height: 48px;
+      border: 1px solid rgba(255,45,135,.4); border-radius: 50%;
+      pointer-events: none; z-index: 99999;
+      opacity: .6;
+      box-shadow: 0 0 15px rgba(255,45,135,.2);
+      transition: width .35s var(--ease-expo), height .35s var(--ease-expo),
+                  border-color .3s, background .3s, opacity .3s;
+    }
+    .cur-ring.hover {
+      width: 68px; height: 68px;
+      border-color: var(--blue);
+      box-shadow: 0 0 25px rgba(0,212,255,.5);
+      opacity: .85;
+    }
+    .cursor-trail {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 99998;
+      mix-blend-mode: screen;
+    }
+
+    /* ──── NOISE ──── */
+    .noise {
+      position: fixed; inset: 0; z-index: 9998; pointer-events: none; opacity: .03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 256px;
+    }
+
+    /* ──── PARTICLES ──── */
+    .particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+    .particle {
+      position: absolute; border-radius: 50%; opacity: 0;
+      animation: float-up linear infinite;
+    }
+    @keyframes float-up {
+      0%   { transform: translateY(100vh) rotate(0deg) scale(0); opacity: 0; }
+      10%  { opacity: .5; }
+      90%  { opacity: .15; }
+      100% { transform: translateY(-20vh) rotate(360deg) scale(1); opacity: 0; }
+    }
+
+    /* ──── AMBIENT GLOW ──── */
+    .ambient-glow {
+      position: fixed; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      pointer-events: none; z-index: 0;
+      opacity: .12;
+      background: radial-gradient(ellipse at 30% 20%, var(--pink), transparent 50%),
+                  radial-gradient(ellipse at 70% 80%, var(--blue), transparent 50%),
+                  radial-gradient(ellipse at 50% 50%, var(--purple), transparent 40%);
+      animation: ambient-drift 15s ease-in-out infinite alternate;
+      filter: blur(100px);
+    }
+    @keyframes ambient-drift {
+      0%   { transform: translate(0, 0) rotate(0deg); }
+      33%  { transform: translate(5%, -3%) rotate(5deg); }
+      66%  { transform: translate(-3%, 5%) rotate(-3deg); }
+      100% { transform: translate(2%, -2%) rotate(8deg); }
+    }
+
+    /* ──── HERO: 2560x1440 MULTI-PLANE HOLOGRAPHIC STAGE (FAST LOAD) ──── */
+    .hero {
+      position: relative; width: 100vw; height: 100vh; min-height: 680px;
+      overflow: hidden; background: #06060a;
+      display: flex; align-items: flex-end; justify-content: center;
+      perspective: 1200px;
+    }
+    .hero-layer {
+      position: absolute; inset: -4%; width: 108%; height: 108%;
+      object-fit: cover; pointer-events: none; user-select: none;
+      will-change: transform, opacity, filter;
+      transform-style: preserve-3d;
+      transition: transform .5s var(--ease-expo), opacity .4s var(--ease-expo), filter .4s var(--ease-expo);
+    }
+    .base-layer {
+      z-index: 1; opacity: 0; filter: brightness(.95);
+      transform: scale(1.02);
+    }
+    .base-layer.in {
+      opacity: 1; transform: scale(1);
+      transition: opacity .4s var(--ease-expo), transform .5s var(--ease-expo);
+    }
+    .shard-layer {
+      z-index: 2; opacity: 0;
+      filter: blur(4px) brightness(1.1);
+    }
+    .shard-layer.assembled {
+      opacity: 1; filter: blur(0px) brightness(1);
+    }
+    .logo-layer {
+      z-index: 4; opacity: 0;
+    }
+    .vi-numeral {
+      filter: drop-shadow(0 0 35px rgba(255,45,135,.45)) drop-shadow(0 0 70px rgba(0,212,255,.25));
+      transform: scale(1.03);
+    }
+    .vi-numeral.in {
+      opacity: 1; transform: scale(1);
+      transition: opacity .35s var(--ease-expo), transform .45s var(--ease-back);
+    }
+    .gta-title {
+      filter: drop-shadow(0 8px 30px rgba(0,0,0,.9));
+      transform: scale(1.04);
+    }
+    .gta-title.in {
+      opacity: 1; transform: scale(1);
+      transition: opacity .35s var(--ease-expo), transform .45s var(--ease-back);
+    }
+    .hero-gradient {
+      position: absolute; inset: 0; z-index: 5;
+      background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(6,6,10,.6) 90%),
+                  linear-gradient(to bottom, rgba(6,6,10,.4) 0%, transparent 20%, transparent 70%, rgba(6,6,10,.95) 95%, rgba(6,6,10,1) 100%);
+      pointer-events: none;
+    }
+    .hero-canvas {
+      position: absolute; inset: 0; z-index: 6;
+      pointer-events: none; opacity: .4;
+    }
+    .hero-bottom-overlay {
+      position: relative; z-index: 7; text-align: center;
+      padding: 0 20px 36px; width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+      pointer-events: auto;
+    }
+    .hero-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(.85rem, 1.6vw, 1.25rem);
+      letter-spacing: clamp(.15em, .5vw, .35em);
+      color: rgba(255,255,255,.9);
+      text-shadow: 0 2px 20px rgba(0,0,0,1), 0 0 20px rgba(255,45,135,.3);
+      opacity: 0; transform: translateY(8px);
+      transition: opacity .35s var(--ease-expo), transform .35s var(--ease-expo);
+      max-width: 90vw;
+    }
+    .hero-tagline.in { opacity: 1; transform: translateY(0); }
+
+    /* ──── SECTIONS (CLEAN, SOLID TYPOGRAPHY, NO TEXT ANIMATION) ──── */
+    section { position: relative; padding: 100px 0; z-index: 2; }
+    .s-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(.8rem, 1.2vw, .95rem);
+      letter-spacing: .45em; color: var(--pink);
+      text-align: center; margin-bottom: 10px;
+      text-shadow: 0 0 15px rgba(255,45,135,.35);
+    }
+    .s-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      letter-spacing: .06em; text-align: center; line-height: 1;
+      margin-bottom: 48px;
+      color: #ffffff;
+      text-shadow: 0 4px 25px rgba(0,0,0,.7);
+    }
+
+    /* ──── MARQUEE (dual direction) ──── */
+    .marquee-section { overflow: hidden; padding: 40px 0; }
+    .marquee-track {
+      display: flex; gap: 6px; width: max-content;
+    }
+    .marquee-track:hover { animation-play-state: paused; }
+    .marquee-track.fwd { animation: scroll-fwd 45s linear infinite; }
+    .marquee-track.rev { animation: scroll-rev 50s linear infinite; margin-top: 6px; }
+    .marquee-track img {
+      height: 180px; object-fit: cover; flex-shrink: 0;
+      border-radius: 4px; cursor: pointer;
+      filter: saturate(.7) brightness(.85);
+      transition: filter .4s, transform .4s var(--ease-expo), border-color .3s;
+      border: 1px solid transparent;
+    }
+    .marquee-track img:hover {
+      filter: saturate(1.3) brightness(1.05);
+      transform: scaleY(1.06) scaleX(1.02);
+      border-color: var(--pink);
+      z-index: 10;
+    }
+    @keyframes scroll-fwd { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes scroll-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+
+
+    /* ──── GALLERY ──── */
+    .gallery { max-width: 1440px; margin: 0 auto; padding: 0 20px; }
+    .g-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 16px;
+    }
+    .g-item {
+      position: relative; overflow: hidden; border-radius: 6px; cursor: pointer;
+      aspect-ratio: 16/9;
+      background: #0e0e14;
+      opacity: 1; transform: translateY(0);
+      transition: transform .4s var(--ease-expo), filter .4s, box-shadow .4s, border-color .3s;
+    }
+    .g-item.w2 { grid-column: span 2; }
+    .g-item.h2 { aspect-ratio: 4/5; }
+    @media (max-width: 900px) {
+      .g-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+      .g-item.w2 { grid-column: span 1; }
+      .g-item.h2 { aspect-ratio: 16/9; }
+    }
+    .g-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .7s var(--ease-expo), filter .4s;
+      filter: brightness(.88) saturate(.95);
+    }
+    .g-item:hover img {
+      transform: scale(1.08);
+      filter: brightness(1.05) saturate(1.15);
+    }
+    .g-item::before {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid transparent; border-radius: 6px;
+      z-index: 3; transition: border-color .3s, box-shadow .4s;
+    }
+    .g-item:hover::before {
+      border-color: var(--pink);
+      box-shadow: inset 0 0 30px rgba(255,45,135,.15), 0 0 25px rgba(255,45,135,.2);
+    }
+    .g-item::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+      background: linear-gradient(to top, rgba(6,6,10,.85), transparent);
+      z-index: 2; opacity: .7; transition: opacity .4s;
+    }
+    .g-item:hover::after { opacity: 1; }
+    .g-item .idx {
+      position: absolute; bottom: 14px; left: 14px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem;
+      color: var(--pink); z-index: 4;
+      opacity: 0; transform: translateY(12px) scale(.8);
+      transition: opacity .3s .05s, transform .35s var(--ease-back) .05s;
+      text-shadow: 0 0 20px rgba(255,45,135,.5);
+    }
+    .g-item:hover .idx { opacity: 1; transform: translateY(0) scale(1); }
+    .g-item .mag {
+      position: absolute; top: 12px; right: 12px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(6,6,10,.5); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 4; opacity: 0; transform: scale(.5) rotate(-90deg);
+      transition: opacity .3s, transform .35s var(--ease-back);
+    }
+    .g-item:hover .mag { opacity: 1; transform: scale(1) rotate(0deg); }
+    .mag svg { width: 14px; height: 14px; stroke: #fff; fill: none; stroke-width: 2; }
+    .g-item .cap {
+      position: absolute; bottom: 14px; right: 14px;
+      font-size: .65rem; letter-spacing: .08em; color: rgba(255,255,255,.7);
+      z-index: 4; opacity: 0; transform: translateX(20px);
+      transition: opacity .3s .12s, transform .4s var(--ease-expo) .12s;
+      max-width: 55%; text-align: right; line-height: 1.4;
+    }
+    .g-item:hover .cap { opacity: 1; transform: translateX(0); }
+
+    /* ──── TRAILER CARDS & YOUTUBE INTEGRATION ──── */
+    .trailer-card {
+      position: relative; overflow: hidden; border-radius: 10px;
+      aspect-ratio: 16/9; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,.6);
+      transition: transform .4s var(--ease-expo), border-color .3s, box-shadow .4s;
+    }
+    .trailer-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,45,135,.45);
+      box-shadow: 0 16px 45px rgba(255,45,135,.25);
+    }
+    .trailer-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s var(--ease-expo), filter .4s;
+      filter: brightness(.82) saturate(.9);
+    }
+    .trailer-card:hover img {
+      transform: scale(1.06);
+      filter: brightness(1) saturate(1.15);
+    }
+    .trailer-card .play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(.85);
+      width: 68px; height: 68px; border-radius: 50%;
+      background: rgba(255,0,0,.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 3; opacity: .88;
+      box-shadow: 0 0 25px rgba(255,0,0,.5);
+      transition: opacity .3s, transform .3s var(--ease-elastic), background .2s, box-shadow .2s;
+    }
+    .trailer-card:hover .play-btn {
+      opacity: 1; transform: translate(-50%, -50%) scale(1.08);
+      background: #ff0000; box-shadow: 0 0 40px rgba(255,0,0,.9);
+    }
+    .trailer-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 16px 18px; z-index: 4;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px;
+      background: linear-gradient(to top, rgba(6,6,10,.95) 0%, rgba(6,6,10,.65) 60%, transparent 100%);
+    }
+    .trailer-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem;
+      letter-spacing: .08em; color: #fff;
+      text-shadow: 0 2px 10px rgba(0,0,0,.9);
+    }
+    .yt-badge-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 4px;
+      background: #ff0000; color: #fff; text-decoration: none;
+      font-family: 'Bebas Neue', sans-serif; font-size: .9rem;
+      letter-spacing: .08em; line-height: 1; flex-shrink: 0;
+      box-shadow: 0 2px 12px rgba(255,0,0,.4);
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .yt-badge-btn:hover {
+      background: #cc0000; transform: translateY(-1px) scale(1.05);
+      box-shadow: 0 4px 18px rgba(255,0,0,.7);
+    }
+
+    /* ──── VIDEO MODAL (YOUTUBE EMBED PLAYER) ──── */
+    .video-modal {
+      position: fixed; inset: 0; z-index: 30000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity .35s var(--ease-expo), visibility .35s;
+    }
+    .video-modal.open {
+      opacity: 1; visibility: visible; pointer-events: auto;
+    }
+    .vm-backdrop {
+      position: absolute; inset: 0;
+      background: rgba(4,4,8,.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+    .vm-container {
+      position: relative; z-index: 2;
+      width: min(1000px, 92vw);
+      background: #0d0d14;
+      border-radius: 12px;
+      border: 1px solid rgba(255,45,135,.3);
+      box-shadow: 0 25px 70px rgba(0,0,0,.95), 0 0 50px rgba(255,45,135,.25);
+      overflow: hidden;
+      transform: scale(.94);
+      transition: transform .35s var(--ease-back);
+    }
+    .video-modal.open .vm-container {
+      transform: scale(1);
+    }
+    .vm-close {
+      position: absolute; top: 12px; right: 12px; z-index: 10;
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(0,0,0,.7); border: 1px solid rgba(255,255,255,.2);
+      color: #fff; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s, transform .2s;
+    }
+    .vm-close:hover {
+      background: var(--pink); transform: scale(1.1);
+    }
+    .vm-close svg { width: 18px; height: 18px; stroke: currentColor; stroke-width: 2.5; fill: none; }
+    .vm-iframe-wrap {
+      position: relative; width: 100%; padding-top: 56.25%;
+      background: #000;
+    }
+    .vm-iframe-wrap iframe {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: 0;
+    }
+    .vm-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; background: rgba(14,14,22,.96);
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .vm-footer span {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.25rem;
+      letter-spacing: .12em; color: #fff;
+    }
+    .vm-yt-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 18px; border-radius: 4px;
+      background: #ff0000; color: #fff; font-family: 'Bebas Neue', sans-serif;
+      font-size: .95rem; letter-spacing: .1em; text-decoration: none;
+      transition: background .2s, transform .2s;
+    }
+    .vm-yt-btn:hover {
+      background: #cc0000; transform: scale(1.04);
+    }
+
+    /* ──── FULL BLEED ──── */
+    .full-bleed {
+      position: relative; height: 85vh; min-height: 450px; overflow: hidden;
+    }
+    .full-bleed img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .fb-over {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,45,135,.12), rgba(0,212,255,.06));
+      mix-blend-mode: overlay;
+    }
+    .fb-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 30%, rgba(6,6,10,.8) 100%);
+    }
+    .fb-text { position: absolute; bottom: 56px; left: 56px; z-index: 3; }
+    .fb-text h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 9vw, 8rem); line-height: .85;
+      letter-spacing: .02em;
+      /* Text stroke effect */
+      -webkit-text-stroke: 2px var(--text);
+      color: transparent;
+      transition: color .6s;
+    }
+    .fb-text:hover h2 {
+      color: var(--text);
+      text-shadow: 0 0 60px rgba(255,45,135,.3);
+    }
+    .fb-text p {
+      font-size: .75rem; letter-spacing: .2em; color: var(--dim); margin-top: 10px;
+    }
+
+    /* ──── TRAILER CARDS ──── */
+    .trailers-wrap {
+      max-width: 1440px; margin: 0 auto; padding: 0 20px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .t-card {
+      position: relative; overflow: hidden; border-radius: 8px;
+      aspect-ratio: 16/9; cursor: pointer;
+      opacity: 1; transform: translateY(0);
+      transition: transform .4s var(--ease-expo), box-shadow .4s;
+    }
+    .t-card.vis { opacity: 1; transform: translateY(0); }
+    .t-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 5s linear, filter .4s;
+      filter: brightness(.78) saturate(.85);
+    }
+    .t-card:hover img {
+      transform: scale(1.12);
+      filter: brightness(1) saturate(1.15);
+    }
+    .t-card .t-glow {
+      position: absolute; inset: 0; opacity: 0; transition: opacity .5s;
+      pointer-events: none;
+    }
+    .t-card:hover .t-glow { opacity: 1; }
+    .t-card .t-label {
+      position: absolute; bottom: 20px; left: 20px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+      letter-spacing: .08em; z-index: 3;
+      text-shadow: 0 2px 12px rgba(0,0,0,.7);
+      opacity: 0; transform: translateY(10px);
+      transition: opacity .3s .05s, transform .3s var(--ease-expo) .05s;
+    }
+    .t-card:hover .t-label { opacity: 1; transform: translateY(0); }
+    .t-card .play-btn {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%) scale(.7);
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,45,135,.65); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 3; opacity: 0;
+      transition: opacity .3s, transform .4s var(--ease-elastic);
+      box-shadow: 0 0 30px rgba(255,45,135,.3);
+    }
+    .t-card:hover .play-btn { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    .play-btn svg { width: 22px; height: 22px; fill: #fff; margin-left: 3px; }
+
+    /* ──── EDITION CARDS ──── */
+    .editions-wrap {
+      max-width: 1200px; margin: 0 auto; padding: 0 20px;
+      display: flex; gap: 24px; align-items: stretch;
+    }
+    .edition-card {
+      flex: 1; position: relative; overflow: hidden; border-radius: 8px;
+      cursor: pointer;
+      opacity: 1; transform: translateY(0);
+      transition: transform .4s var(--ease-expo), box-shadow .4s;
+    }
+    .edition-card.vis { opacity: 1; transform: translateY(0); }
+    .edition-card img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s var(--ease-expo), filter .4s;
+      filter: brightness(.85);
+    }
+    .edition-card:hover img { transform: scale(1.05); filter: brightness(1); }
+    .edition-card::after {
+      content: ''; position: absolute; inset: 0;
+      border: 1px solid transparent; border-radius: 8px;
+      transition: border-color .3s, box-shadow .4s;
+    }
+    .edition-card:hover::after {
+      border-color: var(--gold);
+      box-shadow: 0 0 40px rgba(212,168,67,.12);
+    }
+
+    /* ──── LIGHTBOX ──── */
+    .lb {
+      position: fixed; inset: 0; z-index: 15000;
+      background: rgba(3,3,6,.95); backdrop-filter: blur(40px) saturate(.5);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity .45s var(--ease-expo), visibility .45s;
+      cursor: zoom-out; touch-action: none;
+    }
+    .lb.open { opacity: 1; visibility: visible; }
+    .lb img {
+      max-width: 92vw; max-height: 88vh; object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 40px 100px rgba(0,0,0,.6), 0 0 100px rgba(255,45,135,.06);
+      transform: scale(.82) rotateY(8deg); opacity: 0;
+      transition: transform .6s var(--ease-expo), opacity .4s;
+      transform-origin: center center;
+      user-select: none; -webkit-user-drag: none;
+    }
+    .lb.open img { transform: scale(1) rotateY(0deg); opacity: 1; }
+    .lb.open img.is-zoomed { cursor: grab; }
+    .lb.open img.is-dragging { cursor: grabbing; transition: none !important; }
+    .lb-actions {
+      position: absolute; top: 24px; right: 24px;
+      display: flex; gap: 12px; z-index: 10;
+    }
+    .lb-btn {
+      width: 42px; height: 42px; border: none;
+      background: rgba(255,255,255,.06); border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .4s var(--ease-back);
+      text-decoration: none; color: #fff;
+    }
+    .lb-btn:hover { background: var(--pink); transform: scale(1.15); }
+    .lb-btn svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 2; fill: none; }
+    .lb-close {
+      position: absolute; top: 24px; right: 24px;
+      width: 42px; height: 42px; border: none;
+      background: rgba(255,255,255,.06); border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, transform .4s var(--ease-back);
+    }
+    .lb-close:hover { background: var(--pink); transform: rotate(90deg) scale(1.15); }
+    .lb-close svg { width: 16px; height: 16px; stroke: #fff; stroke-width: 2; }
+    .lb-nav {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(6,6,10,.5); backdrop-filter: blur(10px);
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .25s var(--ease-back);
+    }
+    .lb-nav:hover {
+      background: var(--pink); border-color: var(--pink);
+      transform: translateY(-50%) scale(1.15);
+      box-shadow: 0 0 25px rgba(255,45,135,.3);
+    }
+    .lb-nav svg { width: 18px; height: 18px; stroke: #fff; stroke-width: 2; fill: none; }
+    .lb-prev { left: 20px; }
+    .lb-next { right: 20px; }
+    .lb-counter {
+      position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+      font-family: 'Bebas Neue', sans-serif; font-size: .9rem;
+      letter-spacing: .25em; color: var(--dim);
+    }
+
+    /* ──── FOOTER ──── */
+    footer {
+      text-align: center; padding: 56px 24px 36px;
+      border-top: 1px solid rgba(255,255,255,.04);
+    }
+    footer img { width: 100px; margin-bottom: 16px; opacity: .35; transition: opacity .3s, filter .3s; }
+    footer img:hover { opacity: .7; filter: drop-shadow(0 0 20px rgba(255,45,135,.3)); }
+    footer p { font-size: .68rem; letter-spacing: .1em; color: var(--dim); line-height: 1.9; }
+    footer a { color: var(--pink); text-decoration: none; transition: color .2s; }
+    footer a:hover { color: var(--blue); }
+
+    /* ──── RESPONSIVE ──── */
+    @media (max-width: 960px) {
+      .g-grid { grid-template-columns: 1fr 1fr; }
+      .g-item.w2 { grid-column: span 1; }
+      .editions-wrap { flex-direction: column; }
+      .fb-text { left: 24px; bottom: 28px; }
+      .marquee-track img { height: 130px; }
+    }
+    @media (max-width: 600px) {
+      .g-grid { grid-template-columns: 1fr; gap: 10px; }
+      .g-item.h2 { grid-row: span 1; }
+      section { padding: 70px 0; }
+      .cur-vi, .cur-ring, .cursor-trail { display: none; }
+      body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scroll-progress" id="scrollProg"></div>
+  <div class="cur-vi" id="cVi">
+    <img src="GTA_VI_HighRes_Images/roman_vi_logo_clean.png" alt="VI" class="cur-vi-img">
+  </div>
+  <div class="cur-ring" id="cRing"></div>
+  <div class="noise"></div>
+  <div class="ambient-glow"></div>
+  <div class="particles" id="particles"></div>
+
+  <!-- HERO: 2560x1440 MULTI-PLANE HOLOGRAPHIC STAGE -->
+  <section class="hero" id="hero">
+    <!-- 1. Key Art Base Canvas -->
+    <img class="hero-layer base-layer" id="heroBase" data-depth="0.04" src="GTA_VI_HighRes_Images/01_Jason_and_Lucia_Key_Art_3840.jpg" alt="Jason & Lucia Key Art" loading="eager">
+
+    <!-- 2. Comic-Strip Shard Layers (0-9) -->
+    <img class="hero-layer shard-layer" data-depth="0.02" data-ox="-80" data-oy="-50" src="GTA_VI_HighRes_Images/04_Hero_Shard_Layer_0.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.04" data-ox="90" data-oy="-60" src="GTA_VI_HighRes_Images/05_Hero_Shard_Layer_1.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.05" data-ox="-100" data-oy="70" src="GTA_VI_HighRes_Images/06_Hero_Shard_Layer_2.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.07" data-ox="110" data-oy="55" src="GTA_VI_HighRes_Images/07_Hero_Shard_Layer_3.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.08" data-ox="-120" data-oy="-80" src="GTA_VI_HighRes_Images/08_Hero_Shard_Layer_4.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.10" data-ox="130" data-oy="95" src="GTA_VI_HighRes_Images/09_Hero_Shard_Layer_5.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.11" data-ox="-110" data-oy="120" src="GTA_VI_HighRes_Images/10_Hero_Shard_Layer_6.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.13" data-ox="95" data-oy="-105" src="GTA_VI_HighRes_Images/11_Hero_Shard_Layer_7.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.14" data-ox="-140" data-oy="40" src="GTA_VI_HighRes_Images/12_Hero_Shard_Layer_8.png" alt="" loading="eager">
+    <img class="hero-layer shard-layer" data-depth="0.16" data-ox="120" data-oy="-40" src="GTA_VI_HighRes_Images/13_Hero_Shard_Layer_9.png" alt="" loading="eager">
+
+    <!-- 3. Typography & Roman Crest Layers in exact 2560x1440 alignment -->
+    <img class="hero-layer logo-layer vi-numeral" id="viLogo" data-depth="0.18" src="GTA_VI_HighRes_Images/16_VI_Roman_Numeral_Gradient_Logo.png" alt="VI" loading="eager">
+    <img class="hero-layer logo-layer gta-title" id="gtaLogo" data-depth="0.22" src="GTA_VI_HighRes_Images/15_GTA_Title_Lettering_Logo.png" alt="Grand Theft Auto" loading="eager">
+
+    <!-- 4. Luminous Vignette & Atmosphere Particles -->
+    <div class="hero-gradient"></div>
+    <canvas class="hero-canvas" id="heroCanvas"></canvas>
+
+    <!-- 5. Bottom Overlay -->
+    <div class="hero-bottom-overlay">
+      <p class="hero-tagline" id="heroTagline">WELCOME TO THE STATE OF LEONIDA</p>
+    </div>
+  </section>
+
+  <!-- DUAL MARQUEE -->
+  <section class="marquee-section">
+    <div class="marquee-track fwd" id="mFwd"></div>
+    <div class="marquee-track rev" id="mRev"></div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallerySection">
+    <p class="s-label">THE WORLD OF LEONIDA</p>
+    <h2 class="s-title">GALLERY</h2>
+    <div class="gallery">
+      <div class="g-grid" id="gGrid"></div>
+    </div>
+  </section>
+
+  <!-- FULL BLEED -->
+  <section class="full-bleed" id="fbSection">
+    <img id="fbImg"
+         src="GTA_VI_HighRes_Images/03_Official_Meta_Visual.jpg"
+         alt="Leonida Vice Skyline" loading="lazy" style="transform: scale(1.12);">
+    <div class="fb-over"></div>
+    <div class="fb-vignette"></div>
+    <div class="fb-text">
+      <h2>LEONIDA</h2>
+      <p>A WORLD BEYOND ANYTHING WE'VE BUILT BEFORE</p>
+    </div>
+  </section>
+
+  <!-- OFFICIAL TRAILERS (YOUTUBE INTEGRATION) -->
+  <section id="trailersSection">
+    <p class="s-label">OFFICIAL</p>
+    <h2 class="s-title">TRAILERS</h2>
+    <div class="trailers-wrap" id="trailersWrap"></div>
+  </section>
+
+  <!-- EDITIONS -->
+  <section id="editionsSection">
+    <p class="s-label">PRE-ORDER</p>
+    <h2 class="s-title">EDITIONS & COLLECTIBLES</h2>
+    <div class="editions-wrap">
+      <div class="edition-card" data-src="GTA_VI_HighRes_Images/22_Ultimate_Edition_Desktop_3840.jpg">
+        <img src="GTA_VI_HighRes_Images/22_Ultimate_Edition_Desktop_3840.jpg" alt="Ultimate Edition" loading="lazy">
+      </div>
+      <div class="edition-card" data-src="GTA_VI_HighRes_Images/24_Vintage_Vice_City_Pack_Artwork_3840.jpg">
+        <img src="GTA_VI_HighRes_Images/24_Vintage_Vice_City_Pack_Artwork_3840.jpg" alt="Vintage Vice City Pack" loading="lazy">
+      </div>
+      <div class="edition-card" data-src="GTA_VI_HighRes_Images/34_Collectors_Box_Vice_City_Collection.png">
+        <img src="GTA_VI_HighRes_Images/34_Collectors_Box_Vice_City_Collection.png" alt="Collector's Box Vice City Set" loading="lazy" style="object-fit:contain; padding:24px; background:radial-gradient(circle, rgba(212,168,67,.12) 0%, rgba(14,14,20,.7) 100%);">
+      </div>
+    </div>
+  </section>
+
+  <!-- PROMO + NEWS -->
+  <section id="promoSection">
+    <p class="s-label">DISCOVER</p>
+    <h2 class="s-title">MORE FROM LEONIDA</h2>
+    <div class="trailers-wrap" id="promoWrap"></div>
+  </section>
+
+  <section id="newsSection">
+    <p class="s-label">LATEST</p>
+    <h2 class="s-title">NEWSWIRE</h2>
+    <div class="trailers-wrap" id="newsWrap"></div>
+  </section>
+
+  <!-- MERCH -->
+  <section class="full-bleed" style="height: 50vh; min-height: 300px;">
+    <img src="GTA_VI_HighRes_Images/33_Merchandise_Promo_Card_3840.jpg"
+         alt="Merchandise" loading="lazy">
+    <div class="fb-over"></div>
+    <div class="fb-vignette"></div>
+    <div class="fb-text">
+      <h2 style="font-size: clamp(2rem, 5vw, 4rem);">ROCKSTAR<br>WAREHOUSE</h2>
+      <p>OFFICIAL MERCHANDISE</p>
+    </div>
+  </section>
+
+  <footer>
+    <img src="GTA_VI_HighRes_Images/14_GTA_VI_Official_Emblem_Logo.png" alt="GTA VI">
+    <div style="margin-bottom:24px;">
+      <a href="GTA_VI_Images_HiRes.zip" download class="dl-all-btn" style="display:inline-flex; align-items:center; gap:10px; padding:14px 28px; background:linear-gradient(135deg, var(--pink), #e85d3a); color:#fff; font-family:'Bebas Neue',sans-serif; letter-spacing:0.18em; font-size:1.15rem; border-radius:6px; text-decoration:none; box-shadow:0 0 30px rgba(255,45,135,.4); transition:transform .2s, box-shadow .2s;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        DOWNLOAD ALL 4K IMAGES (.ZIP 10.6 MB)
+      </a>
+    </div>
+    <p>All images &copy; <a href="https://www.rockstargames.com" target="_blank" rel="noopener">Rockstar Games</a>, Take-Two Interactive.<br>
+    This is an unofficial fan gallery. Grand Theft Auto VI is a trademark of Take-Two Interactive.</p>
+  </footer>
+
+  <!-- LIGHTBOX -->
+  <div class="lb" id="lb">
+    <div class="lb-actions">
+      <a class="lb-btn" id="lbDl" href="#" download aria-label="Download Image" title="Download Image">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </a>
+      <button class="lb-btn" id="lbX" aria-label="Close" title="Close (Esc)">
+        <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+    </div>
+    <button class="lb-nav lb-prev" id="lbP" aria-label="Previous">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <img id="lbI" src="" alt="Full Resolution">
+    <button class="lb-nav lb-next" id="lbN" aria-label="Next">
+      <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+    </button>
+    <div class="lb-counter" id="lbC"></div>
+  </div>
+
+  <!-- VIDEO MODAL (OFFICIAL YOUTUBE TRAILERS) -->
+  <div class="video-modal" id="videoModal">
+    <div class="vm-backdrop" id="vmBackdrop"></div>
+    <div class="vm-container">
+      <button class="vm-close" id="vmClose" aria-label="Close Video">
+        <svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+      </button>
+      <div class="vm-iframe-wrap">
+        <iframe id="vmIframe" src="" title="GTA VI Trailer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="vm-footer">
+        <span id="vmTitle">GRAND THEFT AUTO VI — OFFICIAL TRAILER</span>
+        <a id="vmYtLink" href="https://www.youtube.com/watch?v=QdBZY2fkU-0" target="_blank" rel="noopener" class="vm-yt-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          WATCH ON YOUTUBE
+        </a>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ═══════ DATA (HIGH-RES SHOWCASE GALLERY) ═══════ */
+const GALLERY = [
+  { src: 'GTA_VI_HighRes_Images/01_Jason_and_Lucia_Key_Art_3840.jpg', cap: 'Jason & Lucia — Official Key Art', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/02_Key_Visual_Poster_Title_Logo.png', cap: 'Official Key Art Title Poster' },
+  { src: 'GTA_VI_HighRes_Images/03_Official_Meta_Visual.jpg', cap: 'State of Leonida — Vice Beach Skyline', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/19_Launch_Trailer_Key_Visual_3840.jpg', cap: 'Launch Trailer Key Visual', cls: 'h2' },
+  { src: 'GTA_VI_HighRes_Images/17_An_Extended_Look_Desktop_3840.jpg', cap: 'An Extended Look (Desktop 4K)', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/18_An_Extended_Look_Mobile.jpg', cap: 'An Extended Look (Mobile Edition)', cls: 'h2' },
+  { src: 'GTA_VI_HighRes_Images/20_Trailer_2_Key_Visual_3840.jpg', cap: 'Trailer 2: Vice City Horizon' },
+  { src: 'GTA_VI_HighRes_Images/21_Trailer_1_Key_Visual_3840.jpg', cap: 'Trailer 1: First Reveal' },
+  { src: 'GTA_VI_HighRes_Images/22_Ultimate_Edition_Desktop_3840.jpg', cap: 'Grand Theft Auto VI: Ultimate Edition', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/23_Ultimate_Edition_Mobile.jpg', cap: 'Ultimate Edition (Mobile Edition)', cls: 'h2' },
+  { src: 'GTA_VI_HighRes_Images/24_Vintage_Vice_City_Pack_Artwork_3840.jpg', cap: 'Vintage Vice City Pack', cls: 'h2' },
+  { src: 'GTA_VI_HighRes_Images/34_Collectors_Box_Vice_City_Collection.png', cap: 'Vice City Collector’s Box Set' },
+  { src: 'GTA_VI_HighRes_Images/33_Merchandise_Promo_Card_3840.jpg', cap: 'Official Rockstar Warehouse Merch' },
+  { src: 'GTA_VI_HighRes_Images/27_Launch_Gallery_Promo_Desktop_3840.jpg', cap: 'Launch Gallery Feature', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/28_Launch_Gallery_Promo_Mobile.jpg', cap: 'Launch Gallery (Mobile Edition)' },
+  { src: 'GTA_VI_HighRes_Images/25_Music_and_Soundtrack_Desktop_3840.jpg', cap: 'Music & Official Soundtrack' },
+  { src: 'GTA_VI_HighRes_Images/26_Music_and_Soundtrack_Mobile.jpg', cap: 'Soundtrack (Mobile Edition)', cls: 'h2' },
+  { src: 'GTA_VI_HighRes_Images/31_Only_In_Leonida_Desktop_3840.jpg', cap: 'Only In Leonida: Wildlife & Streets' },
+  { src: 'GTA_VI_HighRes_Images/32_Only_In_Leonida_Mobile.jpg', cap: 'Only In Leonida (Mobile Edition)' },
+  { src: 'GTA_VI_HighRes_Images/29_Media_Downloads_Desktop_3840.jpg', cap: 'Media Downloads & Wallpapers', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/30_Media_Downloads_Mobile.jpg', cap: 'Media Downloads (Mobile Edition)' },
+  { src: 'GTA_VI_HighRes_Images/35_Newswire_PreLoad_Now_3840.jpg', cap: 'Newswire: Pre-Load Now', cls: 'w2' },
+  { src: 'GTA_VI_HighRes_Images/36_Newswire_Explore_Launch_Gallery_3840.jpg', cap: 'Newswire: Explore Launch Gallery' },
+  { src: 'GTA_VI_HighRes_Images/37_Newswire_PreLoad_Begins_Nov10_3840.jpg', cap: 'Newswire: Pre-Load Begins Nov 10' },
+];
+
+const TRAILERS = [
+  {
+    src: 'GTA_VI_HighRes_Images/19_Launch_Trailer_Key_Visual_3840.jpg',
+    full: 'GTA_VI_HighRes_Images/19_Launch_Trailer_Key_Visual_3840.jpg',
+    label: 'TRAILER 1 — OFFICIAL REVEAL',
+    glow: 'var(--pink)',
+    ytUrl: 'https://www.youtube.com/watch?v=QdBZY2fkU-0',
+    ytEmbed: 'https://www.youtube-nocookie.com/embed/QdBZY2fkU-0?autoplay=1'
+  },
+  {
+    src: 'GTA_VI_HighRes_Images/17_An_Extended_Look_Desktop_3840.jpg',
+    full: 'GTA_VI_HighRes_Images/17_An_Extended_Look_Desktop_3840.jpg',
+    label: 'AN EXTENDED LOOK — VICE CITY',
+    glow: 'var(--blue)',
+    ytUrl: 'https://www.youtube.com/watch?v=QdBZY2fkU-0',
+    ytEmbed: 'https://www.youtube-nocookie.com/embed/QdBZY2fkU-0?autoplay=1'
+  },
+  {
+    src: 'GTA_VI_HighRes_Images/20_Trailer_2_Key_Visual_3840.jpg',
+    full: 'GTA_VI_HighRes_Images/20_Trailer_2_Key_Visual_3840.jpg',
+    label: 'TRAILER 2 — HORIZON & WILDLIFE',
+    glow: 'var(--gold)',
+    ytUrl: 'https://www.youtube.com/@RockstarGames',
+    ytEmbed: 'https://www.youtube-nocookie.com/embed/QdBZY2fkU-0?autoplay=1'
+  },
+  {
+    src: 'GTA_VI_HighRes_Images/21_Trailer_1_Key_Visual_3840.jpg',
+    full: 'GTA_VI_HighRes_Images/21_Trailer_1_Key_Visual_3840.jpg',
+    label: 'FIRST REVEAL — TEASER',
+    glow: 'var(--teal)',
+    ytUrl: 'https://www.youtube.com/watch?v=QdBZY2fkU-0',
+    ytEmbed: 'https://www.youtube-nocookie.com/embed/QdBZY2fkU-0?autoplay=1'
+  },
+];
+
+const PROMO = [
+  { src: 'GTA_VI_HighRes_Images/27_Launch_Gallery_Promo_Desktop_3840.jpg', full: 'GTA_VI_HighRes_Images/27_Launch_Gallery_Promo_Desktop_3840.jpg', label: 'LAUNCH GALLERY', glow: 'var(--pink)' },
+  { src: 'GTA_VI_HighRes_Images/25_Music_and_Soundtrack_Desktop_3840.jpg', full: 'GTA_VI_HighRes_Images/25_Music_and_Soundtrack_Desktop_3840.jpg', label: 'MUSIC & SOUNDTRACK', glow: 'var(--blue)' },
+  { src: 'GTA_VI_HighRes_Images/31_Only_In_Leonida_Desktop_3840.jpg', full: 'GTA_VI_HighRes_Images/31_Only_In_Leonida_Desktop_3840.jpg', label: 'ONLY IN LEONIDA', glow: 'var(--gold)' },
+  { src: 'GTA_VI_HighRes_Images/29_Media_Downloads_Desktop_3840.jpg', full: 'GTA_VI_HighRes_Images/29_Media_Downloads_Desktop_3840.jpg', label: 'MEDIA & DOWNLOADS', glow: 'var(--teal)' },
+];
+
+const NEWS = [
+  { src: 'GTA_VI_HighRes_Images/35_Newswire_PreLoad_Now_3840.jpg', full: 'GTA_VI_HighRes_Images/35_Newswire_PreLoad_Now_3840.jpg', label: 'PRE-LOAD NOW', glow: 'var(--pink)' },
+  { src: 'GTA_VI_HighRes_Images/36_Newswire_Explore_Launch_Gallery_3840.jpg', full: 'GTA_VI_HighRes_Images/36_Newswire_Explore_Launch_Gallery_3840.jpg', label: 'EXPLORE THE LAUNCH GALLERY', glow: 'var(--blue)' },
+  { src: 'GTA_VI_HighRes_Images/37_Newswire_PreLoad_Begins_Nov10_3840.jpg', full: 'GTA_VI_HighRes_Images/37_Newswire_PreLoad_Begins_Nov10_3840.jpg', label: 'PRE-LOAD BEGINS NOV 10', glow: 'var(--gold)' },
+];
+
+const MARQUEE_FWD = [
+  'GTA_VI_HighRes_Images/01_Jason_and_Lucia_Key_Art_3840.jpg',
+  'GTA_VI_HighRes_Images/17_An_Extended_Look_Desktop_3840.jpg',
+  'GTA_VI_HighRes_Images/19_Launch_Trailer_Key_Visual_3840.jpg',
+  'GTA_VI_HighRes_Images/20_Trailer_2_Key_Visual_3840.jpg',
+  'GTA_VI_HighRes_Images/22_Ultimate_Edition_Desktop_3840.jpg',
+  'GTA_VI_HighRes_Images/25_Music_and_Soundtrack_Desktop_3840.jpg',
+  'GTA_VI_HighRes_Images/27_Launch_Gallery_Promo_Desktop_3840.jpg',
+  'GTA_VI_HighRes_Images/35_Newswire_PreLoad_Now_3840.jpg',
+];
+
+const MARQUEE_REV = [
+  'GTA_VI_HighRes_Images/03_Official_Meta_Visual.jpg',
+  'GTA_VI_HighRes_Images/18_An_Extended_Look_Mobile.jpg',
+  'GTA_VI_HighRes_Images/21_Trailer_1_Key_Visual_3840.jpg',
+  'GTA_VI_HighRes_Images/24_Vintage_Vice_City_Pack_Artwork_3840.jpg',
+  'GTA_VI_HighRes_Images/26_Music_and_Soundtrack_Mobile.jpg',
+  'GTA_VI_HighRes_Images/31_Only_In_Leonida_Desktop_3840.jpg',
+  'GTA_VI_HighRes_Images/32_Only_In_Leonida_Mobile.jpg',
+  'GTA_VI_HighRes_Images/37_Newswire_PreLoad_Begins_Nov10_3840.jpg',
+];
+
+/* ═══════ BUILD DOM ═══════ */
+function buildMarquee(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  [...items, ...items].forEach(s => {
+    const i = document.createElement('img');
+    i.src = s;
+    i.alt = 'GTA VI';
+    i.loading = 'lazy';
+    i.dataset.src = s;
+    el.appendChild(i);
+  });
+}
+buildMarquee('mFwd', MARQUEE_FWD);
+buildMarquee('mRev', MARQUEE_REV);
+
+// Gallery Builder — Clean, NO Badges, NO Shards
+const gGrid = document.getElementById('gGrid');
+if (gGrid) {
+  GALLERY.forEach((item, i) => {
+    const d = document.createElement('div');
+    d.className = 'g-item ' + (item.cls || '');
+    d.dataset.src = item.src;
+    d.innerHTML = `
+      <img src="${item.src}" alt="${item.cap}" loading="lazy">
+      <span class="idx">${String(i+1).padStart(2,'0')}</span>
+      <div class="mag"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></div>
+      <span class="cap">${item.cap}</span>`;
+    gGrid.appendChild(d);
+  });
+}
+
+// Trailer cards builder with direct YouTube links & modal player
+function buildTrailers(containerId, data) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  data.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 't-card trailer-card';
+    d.dataset.src = t.full;
+    d.dataset.embed = t.ytEmbed;
+    d.dataset.yt = t.ytUrl;
+    d.dataset.label = t.label;
+    d.innerHTML = `
+      <img src="${t.src}" alt="${t.label}" loading="lazy">
+      <div class="t-glow" style="background: radial-gradient(circle at 50% 50%, ${t.glow}33, transparent 70%)"></div>
+      <div class="play-btn" title="Play 4K Trailer">
+        <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+      </div>
+      <div class="trailer-bar">
+        <span class="trailer-title">${t.label}</span>
+        <a href="${t.ytUrl}" target="_blank" rel="noopener" class="yt-badge-btn" title="Watch on YouTube (opens new tab)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <span>YOUTUBE</span>
+        </a>
+      </div>`;
+    wrap.appendChild(d);
+  });
+}
+buildTrailers('trailersWrap', TRAILERS);
+
+// Card builder (shared by promo, news)
+function buildCards(containerId, data) {
+  const wrap = document.getElementById(containerId);
+  if (!wrap) return;
+  data.forEach(t => {
+    const d = document.createElement('div');
+    d.className = 't-card'; d.dataset.src = t.full;
+    d.innerHTML = `
+      <img src="${t.src}" alt="${t.label}" loading="lazy">
+      <div class="t-glow" style="background: radial-gradient(circle at 50% 50%, ${t.glow}33, transparent 70%)"></div>
+      <span class="t-label">${t.label}</span>
+      <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div>`;
+    wrap.appendChild(d);
+  });
+}
+buildCards('promoWrap', PROMO);
+buildCards('newsWrap', NEWS);
+
+// Full bleed image clickable
+const fbImg = document.getElementById('fbImg');
+if (fbImg) {
+  fbImg.style.cursor = 'pointer';
+  fbImg.dataset.src = fbImg.src;
+}
+
+/* ═══════ HERO CINEMATIC SEQUENCE (INSTANT FAST LOAD) ═══════ */
+let heroAssembled = false;
+function startHeroSequence() {
+  const shards = document.querySelectorAll('.shard-layer');
+  const base = document.getElementById('heroBase');
+  const gtaLogo = document.getElementById('gtaLogo');
+  const viLogo = document.getElementById('viLogo');
+  const tag = document.getElementById('heroTagline');
+
+  // 1. Key Art Base Canvas is visible immediately
+  if (base) base.classList.add('in');
+
+  // 2. Comic-Strip Shards converge crisply
+  shards.forEach((s, i) => {
+    const ox = (parseInt(s.dataset.ox) || 0) * 0.25;
+    const oy = (parseInt(s.dataset.oy) || 0) * 0.25;
+    s.style.transform = `translate3d(${ox}px, ${oy}px, 0) scale(1.03)`;
+    s.style.opacity = '0';
+    setTimeout(() => {
+      s.style.opacity = '1';
+      s.style.transform = 'translate3d(0, 0, 0) scale(1)';
+      s.classList.add('assembled');
+    }, 30 + i * 22);
+  });
+
+  // 3. Official Logos reveal punchily
+  if (viLogo) setTimeout(() => viLogo.classList.add('in'), 160);
+  if (gtaLogo) setTimeout(() => gtaLogo.classList.add('in'), 260);
+  if (tag) setTimeout(() => tag.classList.add('in'), 360);
+
+  // 4. Parallax takes over smoothly
+  setTimeout(() => {
+    document.querySelectorAll('.hero-layer').forEach(layer => {
+      layer.style.transition = 'opacity 0.4s ease, filter 0.4s ease';
+    });
+    heroAssembled = true;
+  }, 480);
+}
+
+// Start immediately — zero blocking delay
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startHeroSequence);
+} else {
+  startHeroSequence();
+}
+
+/* ═══════ TAB VISIBILITY MANAGEMENT ═══════ */
+let isPageVisible = true;
+document.addEventListener('visibilitychange', () => {
+  isPageVisible = !document.hidden;
+});
+
+/* ═══════ ROMAN VI CURSOR SYSTEM ═══════ */
+(() => {
+  const vi = document.getElementById('cVi');
+  const ring = document.getElementById('cRing');
+  if (!vi || !ring) return;
+
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  if (isTouch) {
+    vi.style.display = 'none';
+    ring.style.display = 'none';
+    return;
+  }
+
+  let mx = -100, my = -100, rx = -100, ry = -100;
+  const trails = [];
+  const TRAIL_COUNT = 6;
+  for (let i = 0; i < TRAIL_COUNT; i++) {
+    const t = document.createElement('div');
+    t.className = 'cursor-trail';
+    const size = 5 - i * .6;
+    Object.assign(t.style, {
+      width: size+'px', height: size+'px',
+      background: i % 2 === 0 ? 'var(--pink)' : 'var(--blue)',
+      opacity: String(.28 - i * .04),
+      transition: 'opacity .25s ease',
+    });
+    document.body.appendChild(t);
+    trails.push({ el: t, x: -100, y: -100 });
+  }
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    vi.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+  });
+
+  document.addEventListener('mousedown', () => {
+    vi.classList.add('active');
+  });
+
+  document.addEventListener('mouseup', () => {
+    vi.classList.remove('active');
+  });
+
+  document.addEventListener('mouseleave', () => {
+    vi.style.opacity = '0';
+    ring.style.opacity = '0';
+    trails.forEach(t => t.el.style.opacity = '0');
+  });
+
+  document.addEventListener('mouseenter', () => {
+    vi.style.opacity = '1';
+    ring.style.opacity = '1';
+    trails.forEach((t, i) => t.el.style.opacity = String(.28 - i * .04));
+  });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  (function loop() {
+    if (isPageVisible) {
+      rx = lerp(rx, mx + 16, .12);
+      ry = lerp(ry, my + 14, .12);
+      ring.style.transform = `translate(${rx-24}px,${ry-24}px)`;
+      let px = mx + 14, py = my + 14;
+      trails.forEach((t, i) => {
+        t.x = lerp(t.x, px, .25 - i * .03);
+        t.y = lerp(t.y, py, .25 - i * .03);
+        t.el.style.transform = `translate(${t.x}px, ${t.y}px)`;
+        px = t.x; py = t.y;
+      });
+    }
+    requestAnimationFrame(loop);
+  })();
+
+  // Robust event delegation for hover states
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest('a, button, [data-src], .g-item, .t-card, .edition-card, .marquee-track img, .lb-close, .lb-nav, .vm-close, .play-btn, .yt-badge-btn')) {
+      vi.classList.add('hover');
+      ring.classList.add('hover');
+    }
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('a, button, [data-src], .g-item, .t-card, .edition-card, .marquee-track img, .lb-close, .lb-nav, .vm-close, .play-btn, .yt-badge-btn')) {
+      vi.classList.remove('hover');
+      ring.classList.remove('hover');
+    }
+  });
+})();
+
+/* ═══════ PARTICLES ═══════ */
+(() => {
+  const c = document.getElementById('particles');
+  if (!c) return;
+  const cols = ['#ff2d87','#00d4ff','#d4a843','#e85d3a','#00e6c3','#a855f7'];
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const s = Math.random() * 3 + 1;
+    Object.assign(p.style, {
+      left: Math.random()*100+'%', width: s+'px', height: s+'px',
+      background: cols[Math.floor(Math.random()*cols.length)],
+      animationDuration: (Math.random()*16+10)+'s',
+      animationDelay: (Math.random()*14)+'s',
+    });
+    c.appendChild(p);
+  }
+})();
+
+/* ═══════ HERO CANVAS (particle network with visibility pause) ═══════ */
+(() => {
+  const canvas = document.getElementById('heroCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], mouse = { x: -1000, y: -1000 };
+  function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize, { passive: true });
+
+  for (let i = 0; i < 60; i++) {
+    particles.push({
+      x: Math.random() * W, y: Math.random() * H,
+      vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4,
+      r: Math.random() * 1.5 + .5,
+    });
+  }
+
+  document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+
+  function draw() {
+    if (isPageVisible) {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 150) {
+          const force = (150 - dist) / 150 * .02;
+          p.vx += dx * force; p.vy += dy * force;
+        }
+        p.vx *= .99; p.vy *= .99;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,45,135,.5)';
+        ctx.fill();
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 120) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(0,212,255,${(.12 * (1 - d/120)).toFixed(3)})`;
+            ctx.lineWidth = .5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ═══════ MULTI-PLANE HOLOGRAPHIC MOUSE PARALLAX ═══════ */
+(() => {
+  const heroLayers = document.querySelectorAll('.hero-layer');
+  let targetX = 0, targetY = 0;
+  let curX = 0, curY = 0;
+
+  window.addEventListener('mousemove', e => {
+    if (!isPageVisible || window.scrollY > window.innerHeight) return;
+    targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+    targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    targetX = 0; targetY = 0;
+  });
+
+  const lerp = (a, b, n) => a + (b - a) * n;
+
+  function renderHeroParallax() {
+    if (heroAssembled && isPageVisible && window.scrollY < window.innerHeight * 1.1) {
+      curX = lerp(curX, targetX, 0.08);
+      curY = lerp(curY, targetY, 0.08);
+
+      heroLayers.forEach(layer => {
+        const depth = parseFloat(layer.dataset.depth || '0.04');
+        const tx = (curX * depth * 55).toFixed(2);
+        const ty = (curY * depth * 55).toFixed(2);
+        const rotY = (curX * depth * 6).toFixed(2);
+        const rotX = (-curY * depth * 6).toFixed(2);
+        layer.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+      });
+    }
+    requestAnimationFrame(renderHeroParallax);
+  }
+  requestAnimationFrame(renderHeroParallax);
+})();
+
+/* ═══════ SCROLL PROGRESS ═══════ */
+window.addEventListener('scroll', () => {
+  const h = document.documentElement.scrollHeight - window.innerHeight;
+  const prog = document.getElementById('scrollProg');
+  if (prog && h > 0) prog.style.width = (window.scrollY / h * 100) + '%';
+}, { passive: true });
+
+
+/* ═══════ CARD REVEAL (CLEAN CARDS ONLY, NO TEXT ANIMATION) ═══════ */
+(() => {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('vis');
+        io.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '120px 0px', threshold: 0.02 });
+
+  document.querySelectorAll('.g-item, .t-card, .edition-card').forEach(el => io.observe(el));
+})();
+
+/* ═══════ PARALLAX FULL BLEED ═══════ */
+(() => {
+  const fb = document.getElementById('fbSection');
+  const img = document.getElementById('fbImg');
+  window.addEventListener('scroll', () => {
+    if (!fb || !img || !isPageVisible) return;
+    const r = fb.getBoundingClientRect();
+    if (r.top < window.innerHeight && r.bottom > 0) {
+      const p = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+      img.style.transform = `scale(1.12) translateY(${(p-.5)*60}px)`;
+    }
+  }, { passive: true });
+})();
+
+/* ═══════ 3D TILT ON CARDS ═══════ */
+document.querySelectorAll('.t-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const rx = ((e.clientY - r.top) / r.height - .5) * -10;
+    const ry = ((e.clientX - r.left) / r.width - .5) * 10;
+    card.style.transform = `perspective(600px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+    card.style.transition = 'none';
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = 'perspective(600px) rotateX(0) rotateY(0) scale(1)';
+    card.style.transition = 'transform .5s var(--ease-expo)';
+  });
+});
+
+/* ═══════ VIDEO MODAL (OFFICIAL YOUTUBE TRAILERS) ═══════ */
+(() => {
+  const modal = document.getElementById('videoModal');
+  const iframe = document.getElementById('vmIframe');
+  const title = document.getElementById('vmTitle');
+  const ytLink = document.getElementById('vmYtLink');
+  const closeBtn = document.getElementById('vmClose');
+  const backdrop = document.getElementById('vmBackdrop');
+
+  function openVideo(embedUrl, label, watchUrl) {
+    if (!modal || !iframe) return;
+    iframe.src = embedUrl;
+    if (title) title.textContent = 'GRAND THEFT AUTO VI — ' + label;
+    if (ytLink) ytLink.href = watchUrl;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideo() {
+    if (!modal || !iframe) return;
+    modal.classList.remove('open');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeVideo);
+  if (backdrop) backdrop.addEventListener('click', closeVideo);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal && modal.classList.contains('open')) {
+      closeVideo();
+    }
+  });
+
+  // Delegate trailer card clicks
+  document.addEventListener('click', e => {
+    const ytBtn = e.target.closest('.yt-badge-btn');
+    if (ytBtn) return; // Allow natural YouTube external link navigation
+
+    const tCard = e.target.closest('.trailer-card');
+    if (tCard && tCard.dataset.embed) {
+      e.preventDefault();
+      openVideo(tCard.dataset.embed, tCard.dataset.label || 'OFFICIAL TRAILER', tCard.dataset.yt || 'https://www.youtube.com/watch?v=QdBZY2fkU-0');
+    }
+  });
+})();
+
+
+
+/* ═══════ LIGHTBOX (ZOOM, PAN, TOUCH SWIPE, PRELOAD, HISTORY & SHORTCUTS) ═══════ */
+(() => {
+  const lb = document.getElementById('lb');
+  const lbI = document.getElementById('lbI');
+  const lbC = document.getElementById('lbC');
+  const lbDl = document.getElementById('lbDl');
+  if (!lb || !lbI || !lbC) return;
+
+  function updateDl() {
+    if (lbDl && srcs[cur]) {
+      lbDl.href = srcs[cur];
+      lbDl.download = srcs[cur].split('/').pop();
+    }
+  }
+
+  // Gather unique image sources across all cards & gallery
+  const allClickable = document.querySelectorAll('[data-src]');
+  const srcs = [];
+  allClickable.forEach(el => {
+    const s = el.dataset.src;
+    if (s && !srcs.includes(s)) srcs.push(s);
+  });
+
+  let cur = 0;
+  let scale = 1, panX = 0, panY = 0;
+  let isDragging = false, startDragX = 0, startDragY = 0;
+
+  function applyZoom(instant = false) {
+    if (instant) lbI.classList.add('is-dragging');
+    else lbI.classList.remove('is-dragging');
+
+    if (scale > 1) {
+      lbI.classList.add('is-zoomed');
+      lbI.style.transform = `translate(${panX}px, ${panY}px) scale(${scale})`;
+    } else {
+      lbI.classList.remove('is-zoomed');
+      lbI.style.transform = 'scale(1) rotateY(0deg)';
+      panX = 0; panY = 0;
+    }
+  }
+
+  function resetZoom() {
+    scale = 1; panX = 0; panY = 0; isDragging = false;
+    lbI.classList.remove('is-zoomed', 'is-dragging');
+  }
+
+  function preloadAdjacent(i) {
+    if (srcs.length <= 1) return;
+    const nextI = (i + 1) % srcs.length;
+    const prevI = (i - 1 + srcs.length) % srcs.length;
+    const im1 = new Image(); im1.src = srcs[nextI];
+    const im2 = new Image(); im2.src = srcs[prevI];
+  }
+
+  function open(i) {
+    cur = (i + srcs.length) % srcs.length;
+    resetZoom();
+    updateDl();
+    lbI.style.opacity = '0';
+    lbI.src = srcs[cur];
+    lbI.onload = () => { lbI.style.opacity = '1'; };
+    lbC.textContent = `${cur+1} / ${srcs.length}`;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    preloadAdjacent(cur);
+
+    try {
+      if (!history.state || !history.state.gtaLbOpen) {
+        history.pushState({ gtaLbOpen: true }, '');
+      }
+    } catch(_) {}
+  }
+
+  function close(fromPopState = false) {
+    if (!lb.classList.contains('open')) return;
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    resetZoom();
+    if (!fromPopState && history.state && history.state.gtaLbOpen) {
+      try { history.back(); } catch(_) {}
+    }
+  }
+
+  function nav(dir) {
+    cur = (cur + dir + srcs.length) % srcs.length;
+    resetZoom();
+    lbI.style.opacity = '0';
+    lbI.style.transform = `scale(.85) rotateY(${dir*12}deg)`;
+    setTimeout(() => {
+      lbI.src = srcs[cur];
+      lbI.style.transition = 'none';
+      lbI.style.transform = `scale(.85) rotateY(${-dir*12}deg)`;
+      requestAnimationFrame(() => {
+        lbI.style.transition = 'transform .5s var(--ease-expo), opacity .35s';
+        lbI.style.opacity = '1';
+        lbI.style.transform = 'scale(1) rotateY(0deg)';
+      });
+      lbC.textContent = `${cur+1} / ${srcs.length}`;
+      updateDl();
+      preloadAdjacent(cur);
+    }, 180);
+  }
+
+  allClickable.forEach(el => {
+    if (el.classList.contains('trailer-card')) return;
+    el.addEventListener('click', e => {
+      e.preventDefault();
+      const s = el.dataset.src;
+      const idx = srcs.indexOf(s);
+      open(idx >= 0 ? idx : 0);
+    });
+  });
+
+  document.getElementById('lbX').addEventListener('click', e => { e.stopPropagation(); close(); });
+  lb.addEventListener('click', e => {
+    if (e.target === lb && scale <= 1) close();
+  });
+  document.getElementById('lbP').addEventListener('click', e => { e.stopPropagation(); nav(-1); });
+  document.getElementById('lbN').addEventListener('click', e => { e.stopPropagation(); nav(1); });
+
+  // History Back Button support
+  window.addEventListener('popstate', () => {
+    if (lb.classList.contains('open')) close(true);
+  });
+
+  // Mouse wheel zoom
+  lb.addEventListener('wheel', e => {
+    if (!lb.classList.contains('open')) return;
+    e.preventDefault();
+    const zoomDelta = e.deltaY > 0 ? -0.25 : 0.25;
+    scale = Math.min(Math.max(1, scale + zoomDelta), 4);
+    if (scale === 1) { panX = 0; panY = 0; }
+    applyZoom();
+  }, { passive: false });
+
+  // Double click zoom toggle
+  lbI.addEventListener('dblclick', e => {
+    e.stopPropagation();
+    if (scale > 1) {
+      resetZoom();
+      applyZoom();
+    } else {
+      scale = 2.5;
+      panX = (window.innerWidth / 2 - e.clientX) * 0.5;
+      panY = (window.innerHeight / 2 - e.clientY) * 0.5;
+      applyZoom();
+    }
+  });
+
+  // Drag to pan when zoomed
+  lbI.addEventListener('mousedown', e => {
+    if (scale <= 1) return;
+    e.preventDefault();
+    isDragging = true;
+    startDragX = e.clientX - panX;
+    startDragY = e.clientY - panY;
+    lbI.classList.add('is-dragging');
+  });
+
+  window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    panX = e.clientX - startDragX;
+    panY = e.clientY - startDragY;
+    applyZoom(true);
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      lbI.classList.remove('is-dragging');
+    }
+  });
+
+  // Touch Swipe & Pinch to Zoom
+  let tStartX = 0, tStartY = 0, initPinchDist = 0, initPinchScale = 1;
+  lb.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      tStartX = e.touches[0].clientX;
+      tStartY = e.touches[0].clientY;
+      if (scale > 1) {
+        isDragging = true;
+        startDragX = e.touches[0].clientX - panX;
+        startDragY = e.touches[0].clientY - panY;
+      }
+    } else if (e.touches.length === 2) {
+      initPinchDist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      initPinchScale = scale;
+    }
+  }, { passive: true });
+
+  lb.addEventListener('touchmove', e => {
+    if (e.touches.length === 1 && isDragging && scale > 1) {
+      panX = e.touches[0].clientX - startDragX;
+      panY = e.touches[0].clientY - startDragY;
+      applyZoom(true);
+    } else if (e.touches.length === 2 && initPinchDist > 0) {
+      const dist = Math.hypot(
+        e.touches[0].clientX - e.touches[1].clientX,
+        e.touches[0].clientY - e.touches[1].clientY
+      );
+      scale = Math.min(Math.max(1, initPinchScale * (dist / initPinchDist)), 4);
+      applyZoom(true);
+    }
+  }, { passive: true });
+
+  lb.addEventListener('touchend', e => {
+    isDragging = false;
+    initPinchDist = 0;
+    if (scale <= 1) {
+      resetZoom();
+      applyZoom();
+      if (e.changedTouches.length === 1) {
+        const dx = e.changedTouches[0].clientX - tStartX;
+        const dy = e.changedTouches[0].clientY - tStartY;
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) nav(1);
+          else nav(-1);
+        } else if (dy > 90 && Math.abs(dy) > Math.abs(dx)) {
+          close();
+        }
+      }
+    }
+  }, { passive: true });
+
+  // Full keyboard navigation
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') {
+      e.preventDefault(); close();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault(); nav(-1);
+    } else if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault(); nav(1);
+    } else if (e.key === 'Home') {
+      e.preventDefault(); open(0);
+    } else if (e.key === 'End') {
+      e.preventDefault(); open(srcs.length - 1);
+    } else if (e.key === '+' || e.key === '=') {
+      e.preventDefault(); scale = Math.min(scale + 0.5, 4); applyZoom();
+    } else if (e.key === '-' || e.key === '_') {
+      e.preventDefault(); scale = Math.max(scale - 0.5, 1); applyZoom();
+    } else if (e.key === '0') {
+      e.preventDefault(); resetZoom(); applyZoom();
+    }
+  });
+})();
+</script>
+</body>
+</html>
