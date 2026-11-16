@@ -1,0 +1,24 @@
+{
+  "name": "8mart",
+  "version": "1.0.0",
+  "description": "A high-performance, animated visual showcase and archival gallery for **Grand Theft Auto VI**, featuring all 37 official 4K/UHD artworks, trailers, key visuals, comic-strip shards, and promotional assets directly ripped from Rockstar Games.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/valetuno/8mart.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valetuno/8mart/issues"
+  },
+  "homepage": "https://github.com/valetuno/8mart#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}

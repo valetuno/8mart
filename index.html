@@ -645,6 +645,125 @@
     footer a { color: var(--pink); text-decoration: none; transition: color .2s; }
     footer a:hover { color: var(--blue); }
 
+    .footer-meta-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 16px 28px;
+      margin: 28px auto 26px;
+      max-width: 760px;
+    }
+    .footer-contact {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 22px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 45, 135, 0.25);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+      transition: all 0.25s ease;
+    }
+    .footer-contact:hover {
+      border-color: var(--pink);
+      background: rgba(255, 45, 135, 0.08);
+      box-shadow: 0 0 24px rgba(255, 45, 135, 0.3);
+      transform: translateY(-1px);
+    }
+    .contact-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--dim);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .contact-email-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff !important;
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+    .contact-email-link:hover {
+      color: var(--blue) !important;
+      text-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
+    }
+    .contact-icon {
+      color: var(--pink);
+      flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .contact-email-link:hover .contact-icon {
+      color: var(--blue);
+      transform: scale(1.1);
+    }
+
+    .page-counter-container {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+    .page-counter-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 18px;
+      background: rgba(14, 14, 20, 0.9);
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+    .page-counter-badge:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 25px rgba(0, 230, 195, 0.25);
+    }
+    .counter-live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--teal);
+      box-shadow: 0 0 8px var(--teal);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 0.4; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 12px var(--teal); }
+    }
+    .counter-label {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.18em;
+      color: var(--dim);
+    }
+    .counter-val {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 0.1em;
+      color: #fff;
+      background: linear-gradient(135deg, #ffffff, var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      min-width: 20px;
+      text-align: right;
+    }
+    .page-counter-sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    .page-counter-sub span {
+      color: var(--pink);
+      font-weight: 600;
+    }
+
     /* ──── RESPONSIVE ──── */
     @media (max-width: 960px) {
       .g-grid { grid-template-columns: 1fr 1fr; }
@@ -660,7 +779,203 @@
       .cur-vi, .cur-ring, .cursor-trail { display: none; }
       body { cursor: auto; }
     }
+
+    /* ──── GTA VI MUSIC PLAYER WIDGET ──── */
+    .music-player-widget {
+      position: fixed;
+      top: 18px;
+      right: 22px;
+      z-index: 10002;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      background: rgba(12, 12, 18, 0.88);
+      border: 1px solid rgba(255, 45, 135, 0.35);
+      border-radius: 14px;
+      padding: 8px 14px 7px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 45, 135, 0.15);
+      backdrop-filter: blur(18px) saturate(1.4);
+      -webkit-backdrop-filter: blur(18px) saturate(1.4);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+      max-width: 340px;
+    }
+    .music-player-widget:hover {
+      border-color: rgba(0, 212, 255, 0.5);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(0, 212, 255, 0.2);
+    }
+    .player-main {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    /* Equalizer */
+    .player-eq {
+      display: flex;
+      align-items: flex-end;
+      gap: 2.5px;
+      height: 18px;
+      width: 17px;
+      flex-shrink: 0;
+    }
+    .music-player-widget .eq-bar {
+      width: 2.5px;
+      background: linear-gradient(180deg, var(--blue), var(--pink));
+      border-radius: 2px;
+      height: 30%;
+      transition: height 0.2s ease;
+    }
+    .music-player-widget.playing .eq-bar.bar-1 { animation: eqAnim1 0.75s ease-in-out infinite alternate; }
+    .music-player-widget.playing .eq-bar.bar-2 { animation: eqAnim2 0.6s ease-in-out infinite alternate; }
+    .music-player-widget.playing .eq-bar.bar-3 { animation: eqAnim3 0.85s ease-in-out infinite alternate; }
+    .music-player-widget.playing .eq-bar.bar-4 { animation: eqAnim4 0.5s ease-in-out infinite alternate; }
+
+    .music-player-widget.paused .eq-bar {
+      height: 3px !important;
+      animation: none !important;
+      background: var(--dim);
+    }
+
+    @keyframes eqAnim1 { 0% { height: 25%; } 100% { height: 95%; } }
+    @keyframes eqAnim2 { 0% { height: 85%; } 100% { height: 20%; } }
+    @keyframes eqAnim3 { 0% { height: 40%; } 100% { height: 100%; } }
+    @keyframes eqAnim4 { 0% { height: 90%; } 100% { height: 35%; } }
+
+    /* Metadata */
+    .player-meta {
+      display: flex;
+      flex-direction: column;
+      min-width: 115px;
+      max-width: 135px;
+      overflow: hidden;
+    }
+    .player-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+    .station-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.16em;
+      color: var(--teal);
+    }
+    .track-badge {
+      font-size: 0.6rem;
+      font-family: 'Inter', sans-serif;
+      color: var(--dim);
+      font-weight: 600;
+    }
+    .track-title-wrap {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .track-title {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: #fff;
+    }
+
+    /* Controls */
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+    }
+    .player-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .player-btn:hover {
+      background: rgba(255, 45, 135, 0.2);
+      border-color: var(--pink);
+      color: #fff;
+      transform: scale(1.1);
+      box-shadow: 0 0 12px rgba(255, 45, 135, 0.4);
+    }
+    .player-btn.play-btn-main {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--pink), #e85d3a);
+      border: none;
+      box-shadow: 0 0 16px rgba(255, 45, 135, 0.4);
+    }
+    .player-btn.play-btn-main:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 22px rgba(255, 45, 135, 0.65);
+    }
+    .player-btn.play-btn-main .icon-pause { display: none; }
+    .player-btn.play-btn-main .icon-play { display: block; margin-left: 2px; }
+
+    .music-player-widget.playing .player-btn.play-btn-main .icon-pause { display: block; }
+    .music-player-widget.playing .player-btn.play-btn-main .icon-play { display: none; }
+
+    /* Progress bar */
+    .player-progress-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 3px;
+      margin-top: 6px;
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+    }
+    .player-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--pink), var(--blue));
+      transition: width 0.15s linear;
+    }
+
+    @media (max-width: 600px) {
+      .music-player-widget {
+        top: 12px;
+        right: 12px;
+        padding: 6px 10px 5px;
+        max-width: 280px;
+      }
+      .player-meta {
+        max-width: 95px;
+        min-width: 75px;
+      }
+      .station-name {
+        font-size: 0.7rem;
+      }
+      .track-title {
+        font-size: 0.7rem;
+      }
+      .player-btn {
+        width: 25px;
+        height: 25px;
+      }
+      .player-btn.play-btn-main {
+        width: 28px;
+        height: 28px;
+      }
+    }
   </style>
+
+  <!-- Vercel Web Analytics -->
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 
@@ -669,6 +984,49 @@
     <img src="GTA_VI_HighRes_Images/roman_vi_logo_clean.png" alt="VI" class="cur-vi-img">
   </div>
   <div class="cur-ring" id="cRing"></div>
+
+  <!-- GTA VI VICE SOUNDTRACK MUSIC PLAYER -->
+  <div class="music-player-widget paused" id="musicPlayer" role="region" aria-label="Vice City Music Player">
+    <div class="player-main">
+      <div class="player-eq" id="playerEq">
+        <span class="eq-bar bar-1"></span>
+        <span class="eq-bar bar-2"></span>
+        <span class="eq-bar bar-3"></span>
+        <span class="eq-bar bar-4"></span>
+      </div>
+
+      <div class="player-meta">
+        <div class="player-tag">
+          <span class="station-name">VICE RADIO</span>
+          <span class="track-badge" id="trackBadge">01 / 03</span>
+        </div>
+        <div class="track-title-wrap">
+          <span class="track-title" id="trackTitle">Lucia's Rush</span>
+        </div>
+      </div>
+
+      <div class="player-controls">
+        <button class="player-btn prev-btn" id="playerPrevBtn" aria-label="Previous Track" title="Previous Track">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+        </button>
+
+        <button class="player-btn play-btn-main" id="playerPlayBtn" aria-label="Play / Pause" title="Play Track">
+          <svg class="icon-play" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="icon-pause" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+
+        <button class="player-btn next-btn" id="playerNextBtn" aria-label="Next Track" title="Next Track">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="player-progress-bar" id="playerProgressBar" title="Click to seek">
+      <div class="player-progress-fill" id="playerProgressFill"></div>
+    </div>
+
+    <audio id="bgMusic" preload="auto"></audio>
+  </div>
   <div class="noise"></div>
   <div class="ambient-glow"></div>
   <div class="particles" id="particles"></div>
@@ -788,6 +1146,31 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         DOWNLOAD ALL 4K IMAGES (.ZIP 10.6 MB)
       </a>
+    </div>
+
+    <!-- CONTACT & VISITOR COUNTER -->
+    <div class="footer-meta-wrap">
+      <div class="footer-contact">
+        <span class="contact-label">CONTACT</span>
+        <a href="mailto:olympicfun7@gmail.com" class="contact-email-link" title="Contact olympicfun7@gmail.com">
+          <svg class="contact-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="16" x="2" y="4" rx="2"/>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+          </svg>
+          <span>olympicfun7@gmail.com</span>
+        </a>
+      </div>
+
+      <div class="page-counter-container">
+        <div class="page-counter-badge" title="Total Page Loads">
+          <span class="counter-live-dot"></span>
+          <span class="counter-label">PAGE LOADS</span>
+          <span class="counter-val" id="pageLoadCounter">1</span>
+        </div>
+        <div class="page-counter-sub">
+          Your Visits: <span id="userVisitCount">1</span>
+        </div>
+      </div>
     </div>
     <p>All images &copy; <a href="https://www.rockstargames.com" target="_blank" rel="noopener">Rockstar Games</a>, Take-Two Interactive.<br>
     This is an unofficial fan gallery. Grand Theft Auto VI is a trademark of Take-Two Interactive.</p>
@@ -1623,6 +2006,247 @@ document.querySelectorAll('.t-card').forEach(card => {
       e.preventDefault(); resetZoom(); applyZoom();
     }
   });
+})();
+
+/* ═══════ PAGE LOAD COUNTER ═══════ */
+(() => {
+  const counterEl = document.getElementById('pageLoadCounter');
+  const userVisitsEl = document.getElementById('userVisitCount');
+
+  // 1. Increment and persist locally in localStorage
+  let localLoads = 1;
+  try {
+    const stored = localStorage.getItem('gta_gallery_page_loads');
+    localLoads = (parseInt(stored, 10) || 0) + 1;
+    localStorage.setItem('gta_gallery_page_loads', localLoads.toString());
+    localStorage.setItem('gta_gallery_last_visit', new Date().toISOString());
+  } catch (e) {
+    console.debug('Storage error:', e);
+  }
+
+  // Update user's personal count immediately
+  if (userVisitsEl) userVisitsEl.textContent = localLoads.toLocaleString();
+
+  // Determine initial badge number
+  let displayCount = localLoads;
+  try {
+    const cachedGlobal = localStorage.getItem('gta_gallery_global_loads');
+    if (cachedGlobal) {
+      displayCount = Math.max(parseInt(cachedGlobal, 10) + 1, localLoads);
+    }
+  } catch (e) {}
+
+  if (counterEl) counterEl.textContent = displayCount.toLocaleString();
+
+  // 2. Fetch and sync live global page load counter across all visitors
+  (async () => {
+    try {
+      const res = await fetch('https://api.counterapi.dev/v1/8mart-leonida-gallery/page-loads/up');
+      if (res.ok) {
+        const data = await res.json();
+        if (data && typeof data.count === 'number') {
+          if (counterEl) counterEl.textContent = data.count.toLocaleString();
+          localStorage.setItem('gta_gallery_global_loads', data.count.toString());
+        }
+      }
+    } catch (err) {
+      // Local count is already displayed seamlessly
+      console.debug('Global counter sync notice:', err);
+    }
+  })();
+})();
+
+/* ═══════ GTA VI MULTI-TRACK MUSIC PLAYER ═══════ */
+(() => {
+  const player = document.getElementById('musicPlayer');
+  const audio = document.getElementById('bgMusic');
+  const playBtn = document.getElementById('playerPlayBtn');
+  const prevBtn = document.getElementById('playerPrevBtn');
+  const nextBtn = document.getElementById('playerNextBtn');
+  const titleEl = document.getElementById('trackTitle');
+  const badgeEl = document.getElementById('trackBadge');
+  const progressFill = document.getElementById('playerProgressFill');
+  const progressBar = document.getElementById('playerProgressBar');
+
+  if (!player || !audio || !playBtn) return;
+
+  const tracks = [
+    { title: "Lucia's Rush", src: "assets/track_1.mp3" },
+    { title: "Everybody Get Loose", src: "assets/track_2.mp3" },
+    { title: "Zapatilla Heat", src: "assets/track_3.mp3" }
+  ];
+
+  let currentTrackIdx = 0;
+  const savedIdx = parseInt(localStorage.getItem('gta_player_track_idx'), 10);
+  if (!isNaN(savedIdx) && savedIdx >= 0 && savedIdx < tracks.length) {
+    currentTrackIdx = savedIdx;
+  }
+
+  audio.volume = 0.55;
+
+  let isPlaying = false;
+  let hasInteracted = false;
+  let wasPlayingBeforeVideo = false;
+
+  function loadTrack(idx, autoPlay = false) {
+    currentTrackIdx = (idx + tracks.length) % tracks.length;
+    localStorage.setItem('gta_player_track_idx', currentTrackIdx.toString());
+    const track = tracks[currentTrackIdx];
+
+    audio.src = track.src;
+    if (titleEl) titleEl.textContent = track.title;
+    if (badgeEl) badgeEl.textContent = `0${currentTrackIdx + 1} / 0${tracks.length}`;
+    if (progressFill) progressFill.style.width = '0%';
+
+    if (autoPlay) {
+      playAudio();
+    }
+  }
+
+  function setPlayingState(playing) {
+    isPlaying = playing;
+    if (playing) {
+      player.classList.remove('paused');
+      player.classList.add('playing');
+      playBtn.setAttribute('title', 'Pause Track');
+    } else {
+      player.classList.remove('playing');
+      player.classList.add('paused');
+      playBtn.setAttribute('title', 'Play Track');
+    }
+  }
+
+  function playAudio() {
+    audio.play().then(() => {
+      setPlayingState(true);
+    }).catch(err => {
+      setPlayingState(false);
+      console.debug('Autoplay deferred for user gesture:', err);
+    });
+  }
+
+  function pauseAudio() {
+    audio.pause();
+    setPlayingState(false);
+  }
+
+  function togglePlay() {
+    hasInteracted = true;
+    if (audio.paused) {
+      playAudio();
+      localStorage.setItem('gta_bg_music_pref', 'play');
+    } else {
+      pauseAudio();
+      localStorage.setItem('gta_bg_music_pref', 'pause');
+    }
+  }
+
+  function nextTrack() {
+    hasInteracted = true;
+    localStorage.setItem('gta_bg_music_pref', 'play');
+    loadTrack(currentTrackIdx + 1, true);
+  }
+
+  function prevTrack() {
+    hasInteracted = true;
+    localStorage.setItem('gta_bg_music_pref', 'play');
+    if (audio.currentTime > 3) {
+      audio.currentTime = 0;
+      playAudio();
+    } else {
+      loadTrack(currentTrackIdx - 1, true);
+    }
+  }
+
+  // Button Listeners
+  playBtn.addEventListener('click', e => { e.stopPropagation(); togglePlay(); });
+  nextBtn.addEventListener('click', e => { e.stopPropagation(); nextTrack(); });
+  prevBtn.addEventListener('click', e => { e.stopPropagation(); prevTrack(); });
+
+  // Progress update & scrubbing
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration && progressFill) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      progressFill.style.width = `${pct}%`;
+    }
+  });
+
+  if (progressBar) {
+    progressBar.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!audio.duration) return;
+      const rect = progressBar.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = Math.max(0, Math.min(pos * audio.duration, audio.duration));
+      if (audio.paused) playAudio();
+    });
+  }
+
+  // Auto-advance to next track when finished
+  audio.addEventListener('ended', () => {
+    nextTrack();
+  });
+
+  // Initial load
+  loadTrack(currentTrackIdx, false);
+
+  // Preference check & autoplay
+  const pref = localStorage.getItem('gta_bg_music_pref');
+  if (pref !== 'pause') {
+    playAudio();
+  } else {
+    setPlayingState(false);
+  }
+
+  // Unlock audio on first user gesture
+  const unlockAudio = () => {
+    if (hasInteracted) return;
+    hasInteracted = true;
+    if (localStorage.getItem('gta_bg_music_pref') !== 'pause' && audio.paused) {
+      playAudio();
+    }
+    ['click', 'keydown', 'pointerdown', 'touchstart', 'scroll'].forEach(evt => {
+      document.removeEventListener(evt, unlockAudio);
+    });
+  };
+
+  ['click', 'keydown', 'pointerdown', 'touchstart', 'scroll'].forEach(evt => {
+    document.addEventListener(evt, unlockAudio, { passive: true, once: true });
+  });
+
+  // Handle visibility changes
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (!audio.paused) {
+        audio.pause();
+        setPlayingState(false);
+      }
+    } else {
+      if (isPlaying && localStorage.getItem('gta_bg_music_pref') !== 'pause') {
+        playAudio();
+      }
+    }
+  });
+
+  // Pause music when trailer video modal opens, resume when closed
+  const videoModal = document.getElementById('videoModal');
+  if (videoModal) {
+    const observer = new MutationObserver(() => {
+      if (videoModal.classList.contains('open')) {
+        if (!audio.paused) {
+          wasPlayingBeforeVideo = true;
+          audio.pause();
+          setPlayingState(false);
+        }
+      } else {
+        if (wasPlayingBeforeVideo && localStorage.getItem('gta_bg_music_pref') !== 'pause') {
+          wasPlayingBeforeVideo = false;
+          playAudio();
+        }
+      }
+    });
+    observer.observe(videoModal, { attributes: true, attributeFilter: ['class'] });
+  }
 })();
 </script>
 </body>
